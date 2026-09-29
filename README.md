@@ -2,7 +2,7 @@
 
 > A hands-on cybersecurity project: designing, defending and attacking the IT infrastructure of a small, fictional regional airport in an isolated virtual lab.
 
-**Status:** Work in progress – currently at version 0.1
+**Status:** Work in progress – version 0.1 completed
 
 ---
 
@@ -27,17 +27,17 @@ The key lesson: the airports were not attacked directly – **their supplier was
 
 **Version 0.1 (current):**
 
-| Machine | Role in the scenario | OS |
-|---|---|---|
-| `checkin-srv` | Check-in system (provided by an external supplier) | Ubuntu Server |
-| `checkin-pc01` | Check-in desk operator's workstation | Windows |
+| Machine | Role in the scenario | OS | IP address |
+|---|---|---|---|
+| `checkin-srv` | Check-in system (provided by an external supplier) | Ubuntu Server | 10.10.2.66/27 |
+| `checkin-pc01` | Check-in desk operator's workstation | Windows 11 Enterprise | 10.10.2.80/27 |
 
-Both machines run on **Hyper-V**, connected through an isolated private virtual network with no access to the internet or to my home network.
+Both machines run on **Hyper-V**, connected through the isolated private switch `Checkin-Zone`, with no access to the internet or to my home network.
 
 ## Roadmap
 
-- [ ] **Chapter 1 – Network design:** network zones and IP addressing plan
-- [ ] **Chapter 2 – Core systems:** Ubuntu server and Windows workstation
+- [x] **[Chapter 1 – Network design](01-network-design/README.md):** network zones and IP addressing plan
+- [x] **[Chapter 2 – Core systems](02-core-systems/README.md):** Ubuntu server and Windows workstation on an isolated network
 - [ ] **Chapter 3 – Monitoring:** system availability with Prometheus and Grafana
 - [ ] **Chapter 4 – SOC:** log collection and detection with Wazuh
 - [ ] **Chapter 5 – Attack simulation:** phishing and lateral movement from Kali Linux
@@ -56,6 +56,6 @@ Monteverde Airport is **entirely fictional**. All activities, including attack s
 
 ## About me
 
-I'm **Andrei Nicolae Telea**, currently training as an **ICT Security Specialist**. This project is where I put into practice what I study.
+I'm **Andrei Nicolae Telea**, currently training as an **ICT Security Specialist** (IFTS course, Italy). This project is where I put into practice what I study.
 
 🔗 [LinkedIn](https://www.linkedin.com/in/andreitelea/)
