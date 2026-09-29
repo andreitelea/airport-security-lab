@@ -30,6 +30,8 @@
 | IP address | 10.10.2.66/27 (static) | 10.10.2.80/27 (static) |
 | Gateway | 10.10.2.65 (future firewall) | 10.10.2.65 (future firewall) |
 
+![Hyper-V Manager showing the lab virtual machines](images/hyperv-manager.png)
+
 ## Security choices during setup
 
 - **No obvious usernames** such as `admin` or `root`, which are the first ones attackers try
@@ -53,6 +55,8 @@ The account was created with PowerShell (the way accounts are managed at scale i
 `Read-Host -AsSecureString` keeps the password out of the command history.
 
 **Verification:** `Get-LocalGroupMember -Group "Administrators"` does not list `checkin-op01`. When the operator tries to run an elevated task, Windows asks for administrator credentials.
+
+![checkin-op01 exists as a standard user and is not a member of the Administrators group](images/least-privilege-check.png)
 
 ## Static IP configuration
 
@@ -81,6 +85,8 @@ echo 'network: {config: disabled}' | sudo tee /etc/cloud/cloud.cfg.d/99-disable-
 
 The configuration was applied with `sudo netplan try`, which rolls back automatically if the change is not confirmed – a safe habit on remote servers.
 
+![checkin-srv with static address 10.10.2.66/27 on eth0](images/server-ip-config.png)
+
 **Workstation:** IPv4 set manually via `ncpa.cpl` (10.10.2.80, mask 255.255.255.224, gateway 10.10.2.65).
 
 ## Connectivity test
@@ -90,6 +96,8 @@ From `checkin-pc01`:
 ```
 ping 10.10.2.66
 ```
+
+![Successful ping from checkin-pc01 to checkin-srv](images/ping-test.png)
 
 The server replies: the two machines communicate on the isolated check-in network.
 
