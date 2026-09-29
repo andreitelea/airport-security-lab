@@ -11,7 +11,7 @@
 | Item | Choice | Why |
 |---|---|---|
 | Hypervisor | **Microsoft Hyper-V** (Windows 11 Pro) | Type-1 hypervisor, the same technology used on Windows Server in enterprise environments |
-| Storage | Dedicated NVMe drive (`D:\Lab`) | Keeps the lab separate from the host operating system |
+| Storage | Dedicated NVMe drive (`E:\Lab`) | Keeps the lab separate from the host operating system |
 | Virtual switch | `Checkin-Zone` – **Private** | VMs can talk only to each other: no internet, no access to my home network |
 
 > During installation, each VM was temporarily connected to Hyper-V's *Default Switch* to download updates, then moved to the private switch.
