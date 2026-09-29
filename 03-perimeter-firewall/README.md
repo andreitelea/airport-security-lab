@@ -41,6 +41,8 @@ flowchart LR
 | WAN – `hn0` | Hyper-V *Default Switch*, address via DHCP |
 | LAN – `hn1` | `Checkin-Zone` private switch, **10.10.2.65/27** – the gateway reserved in the [addressing plan](../01-network-design/README.md) |
 
+![OPNsense console showing the WAN (hn0) and LAN (hn1, 10.10.2.65/27) interfaces](images/opnsense-console.png)
+
 ## Security choices
 
 - **Verified download:** the image was checked with SHA-256 before installation, taking the checksum from the official OPNsense sources rather than from the download mirror (mirrors are run by third parties)
@@ -63,6 +65,8 @@ flowchart LR
 | Outbound NAT | Automatic |
 | Time zone | Europe/Rome |
 
+![OPNsense web interface dashboard, reachable only from the LAN](images/opnsense-dashboard.png)
+
 Both check-in hosts now use the firewall as their **DNS server** (10.10.2.65):
 
 - **Server:** `nameservers: addresses: [10.10.2.65]` added to the netplan configuration, applied with `sudo netplan try`
@@ -79,6 +83,8 @@ sudo apt update        # real-world check: package downloads through the firewal
 ```
 
 All tests passed from `checkin-srv`; `checkin-pc01` can browse the web through the firewall.
+
+![Successful ping to 1.1.1.1 and ubuntu.com from checkin-srv](images/connectivity-tests.png)
 
 ## Known limitation (by design, for now)
 
