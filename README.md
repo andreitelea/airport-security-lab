@@ -2,7 +2,7 @@
 
 > A hands-on cybersecurity project: designing, defending and attacking the IT infrastructure of a small, fictional regional airport in an isolated virtual lab.
 
-**Status:** Work in progress – version 0.1 completed
+**Status:** Work in progress – version 0.2 completed ✅
 
 ---
 
@@ -25,30 +25,33 @@ The key lesson: the airports were not attacked directly – **their supplier was
 
 ## Lab architecture
 
-**Version 0.1 (current):**
+**Version 0.2 (current):**
 
 | Machine | Role in the scenario | OS | IP address |
 |---|---|---|---|
+| `fw-monteverde` | Perimeter firewall and gateway of the check-in zone | OPNsense | 10.10.2.65/27 (LAN) |
 | `checkin-srv` | Check-in system (provided by an external supplier) | Ubuntu Server | 10.10.2.66/27 |
 | `checkin-pc01` | Check-in desk operator's workstation | Windows 11 Enterprise | 10.10.2.80/27 |
 
-Both machines run on **Hyper-V**, connected through the isolated private switch `Checkin-Zone`, with no access to the internet or to my home network.
+All machines run on **Hyper-V**. The check-in zone sits on the isolated private switch `Checkin-Zone`: its only way out is through the firewall.
 
-## Roadmap
+## 🗺️ Roadmap
 
 - [x] **[Chapter 1 – Network design](01-network-design/README.md):** network zones and IP addressing plan
 - [x] **[Chapter 2 – Core systems](02-core-systems/README.md):** Ubuntu server and Windows workstation on an isolated network
-- [ ] **Chapter 3 – Monitoring:** system availability with Prometheus and Grafana
-- [ ] **Chapter 4 – SOC:** log collection and detection with Wazuh
-- [ ] **Chapter 5 – Attack simulation:** phishing and lateral movement from Kali Linux
-- [ ] **Chapter 6 – Incident response:** containment and incident report
-- [ ] **Chapter 7 – Governance:** risk assessment, disaster recovery plan, GDPR and NIS2
+- [x] **[Chapter 3 – Perimeter firewall](03-perimeter-firewall/README.md):** OPNsense gateway, NAT and DNS
+- [ ] **Chapter 4 – Firewall rules:** default deny, only the traffic the airport actually needs
+- [ ] **Chapter 5 – Monitoring:** system availability with Prometheus and Grafana
+- [ ] **Chapter 6 – SOC:** log collection and detection with Wazuh
+- [ ] **Chapter 7 – Attack simulation:** phishing and lateral movement from Kali Linux
+- [ ] **Chapter 8 – Incident response:** containment and incident report
+- [ ] **Chapter 9 – Governance:** risk assessment, disaster recovery plan, GDPR and NIS2
 
 Each chapter will have its own folder with documentation, configuration files and screenshots.
 
 ## Tools
 
-Hyper-V · Ubuntu Server · Windows · *(coming next: Prometheus, Grafana, Wazuh, Kali Linux)*
+Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · *(coming next: Prometheus, Grafana, Wazuh, Kali Linux)*
 
 ## Disclaimer
 
