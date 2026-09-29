@@ -44,7 +44,7 @@
 
 There is no DHCP server on the private network yet, so addresses are assigned manually according to the [addressing plan](../01-network-design/README.md).
 
-**Server – netplan** (`/etc/netplan/50-cloud-init.yaml`, permissions `600`):
+**Server – netplan** (`/etc/netplan/00-installer-config.yaml`, permissions `600`):
 
 ```yaml
 network:
