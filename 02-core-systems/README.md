@@ -40,6 +40,20 @@
 - **Fully updated** before being connected to the private network
 - **Checkpoints** (`base-install`, `v0.1-network`) to roll back safely after experiments
 
+## Least privilege: operator account
+
+The check-in operator does not work with an administrator account. If a malicious attachment were opened, malware would only get the limited rights of a standard user.
+
+The account was created with PowerShell (the way accounts are managed at scale in companies):
+
+    $pw = Read-Host -AsSecureString "Password for checkin-op01"
+    New-LocalUser -Name "checkin-op01" -Password $pw -FullName "Check-in Operator 01" -Description "Check-in desk operator - standard user"
+    Add-LocalGroupMember -Group "Users" -Member "checkin-op01"
+
+`Read-Host -AsSecureString` keeps the password out of the command history.
+
+**Verification:** `Get-LocalGroupMember -Group "Administrators"` does not list `checkin-op01`. When the operator tries to run an elevated task, Windows asks for administrator credentials.
+
 ## Static IP configuration
 
 There is no DHCP server on the private network yet, so addresses are assigned manually according to the [addressing plan](../01-network-design/README.md).
