@@ -2,7 +2,7 @@
 
 > A hands-on cybersecurity project: designing, defending and attacking the IT infrastructure of a small, fictional regional airport in an isolated virtual lab.
 
-**Status:** Work in progress – version 0.2 completed
+**Status:** Work in progress – version 0.3 completed
 
 ---
 
@@ -25,7 +25,7 @@ The key lesson: the airports were not attacked directly – **their supplier was
 
 ## Lab architecture
 
-**Version 0.2 (current):**
+**Version 0.3 (current):**
 
 | Machine | Role in the scenario | OS | IP address |
 |---|---|---|---|
@@ -35,12 +35,12 @@ The key lesson: the airports were not attacked directly – **their supplier was
 
 All machines run on **Hyper-V**. The check-in zone sits on the isolated private switch `Checkin-Zone`: its only way out is through the firewall.
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [x] **[Chapter 1 – Network design](01-network-design/README.md):** network zones and IP addressing plan
 - [x] **[Chapter 2 – Core systems](02-core-systems/README.md):** Ubuntu server and Windows workstation on an isolated network
 - [x] **[Chapter 3 – Perimeter firewall](03-perimeter-firewall/README.md):** OPNsense gateway, NAT and DNS
-- [ ] **Chapter 4 – Firewall rules:** default deny, only the traffic the airport actually needs
+- [x] **[Chapter 4 – Firewall rules](04-firewall-rules/README.md):** default deny, centralized time sync and a real log investigation
 - [ ] **Chapter 5 – Monitoring:** system availability with Prometheus and Grafana
 - [ ] **Chapter 6 – SOC:** log collection and detection with Wazuh
 - [ ] **Chapter 7 – Attack simulation:** phishing and lateral movement from Kali Linux
@@ -51,7 +51,7 @@ Each chapter will have its own folder with documentation, configuration files an
 
 ## Tools
 
-Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · *(coming next: Prometheus, Grafana, Wazuh, Kali Linux)*
+Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · chrony · *(coming next: Prometheus, Grafana, Wazuh, Kali Linux)*
 
 ## Disclaimer
 
