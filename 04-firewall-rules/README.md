@@ -116,7 +116,7 @@ w32tm /resync
 
 ## Known limitation
 
-The perimeter firewall only filters traffic that **passes through it**. `checkin-pc01` and `checkin-srv` are on the same subnet and talk to each other directly, so the rule "the workstation may only use the check-in application on the server" cannot be enforced here. It requires a **host-based firewall** on the server – a later step in a *defense in depth* approach.
+The perimeter firewall only filters traffic that **passes through it**. `checkin-pc01` and `checkin-srv` are on the same subnet and talk to each other directly, so the rule "the workstation may only use the check-in application on the server" cannot be enforced here. It requires a **host-based firewall** on the server implemented in [Chapter 5](../05-host-firewall/README.md) as part of a *defense in depth* approach.
 
 ## Lessons learned
 
