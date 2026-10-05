@@ -115,7 +115,7 @@ promtool check config /etc/prometheus/prometheus.yml
 
 ![Grafana Node Exporter Full dashboard showing the CPU spike generated on checkin-srv](images/grafana-cpu-spike.png)
 
-## ⏱️ Infrastructure change: chrony replaces ntpd on the firewall
+## Infrastructure change: chrony replaces ntpd on the firewall
 
 ### Problem
 After the firewall was rebooted (RAM change, new network interface), every client again showed its time source as unusable (`^?`). `sudo chronyc ntpdata` showed replies arriving (`Total RX` > 0) but none usable (`Total good RX 0`, `Leap status: Not synchronised`). The firewall's built-in **ntpd** needed a long time after each boot before declaring itself synchronized, and its offsets and jitter on the virtual machine were high – a **recurring** problem, not a one-off.
