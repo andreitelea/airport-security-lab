@@ -2,7 +2,7 @@
 
 > A hands-on cybersecurity project: designing, defending and attacking the IT infrastructure of a small, fictional regional airport in an isolated virtual lab.
 
-**Status:** Work in progress – version 0.4 completed
+**Status:** Work in progress – version 0.6 completed
 
 ---
 
@@ -25,15 +25,17 @@ The key lesson: the airports were not attacked directly – **their supplier was
 
 ## Lab architecture
 
-**Version 0.4 (current):**
+**Version 0.6 (current):**
 
-| Machine | Role in the scenario | OS | IP address |
-|---|---|---|---|
-| `fw-monteverde` | Perimeter firewall and gateway of the check-in zone | OPNsense | 10.10.2.65/27 (LAN) |
-| `checkin-srv` | Check-in system (provided by an external supplier), protected by a host firewall | Ubuntu Server | 10.10.2.66/27 |
-| `checkin-pc01` | Check-in desk operator's workstation | Windows 11 Enterprise | 10.10.2.80/27 |
+| Machine | Zone | Role in the scenario | OS | IP address |
+|---|---|---|---|---|
+| `fw-monteverde` | – | Perimeter firewall, gateway, DNS and time source for all zones | OPNsense | 10.10.2.65 (check-in) · 10.10.2.97 (SecOps) |
+| `checkin-srv` | Check-in | Check-in system (provided by an external supplier), protected by a host firewall | Ubuntu Server | 10.10.2.66/27 |
+| `checkin-pc01` | Check-in | Check-in desk operator's workstation | Windows 11 Enterprise | 10.10.2.80/27 |
+| `mon-srv` | Security Operations | Monitoring: Prometheus and Grafana | Ubuntu Server | 10.10.2.98/28 |
+| `soc-ws01` | Security Operations | Analyst workstation | Xubuntu | 10.10.2.100/28 |
 
-All machines run on **Hyper-V**. The check-in zone sits on the isolated private switch `Checkin-Zone`: its only way out is through the firewall.
+All machines run on **Hyper-V**. Each zone sits on its own isolated private switch (`Checkin-Zone`, `SecOps-Zone`): traffic between zones and towards the internet can only pass through the firewall.
 
 ## Roadmap
 
@@ -42,7 +44,7 @@ All machines run on **Hyper-V**. The check-in zone sits on the isolated private 
 - [x] **[Chapter 3 – Perimeter firewall](03-perimeter-firewall/README.md):** OPNsense gateway, NAT and DNS
 - [x] **[Chapter 4 – Firewall rules](04-firewall-rules/README.md):** default deny, centralized time sync and a real log investigation
 - [x] **[Chapter 5 – Host firewall](05-host-firewall/README.md):** ufw on the check-in server – defense in depth
-- [ ] **Chapter 6 – Monitoring:** system availability with Prometheus and Grafana
+- [x] **[Chapter 6 – Monitoring](06-monitoring/README.md):** Security Operations zone, Prometheus and Grafana, chrony on the firewall
 - [ ] **Chapter 7 – SOC:** log collection and detection with Wazuh
 - [ ] **Chapter 8 – Attack simulation:** phishing and lateral movement from Kali Linux
 - [ ] **Chapter 9 – Incident response:** containment and incident report
@@ -52,7 +54,7 @@ Each chapter will have its own folder with documentation, configuration files an
 
 ## Tools
 
-Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · chrony · ufw · *(coming next: Prometheus, Grafana, Wazuh, Kali Linux)*
+Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · chrony · ufw · Prometheus · Grafana · Xubuntu · *(coming next: Wazuh, Kali Linux)*
 
 ## Disclaimer
 
