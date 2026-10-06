@@ -2,7 +2,7 @@
 
 > A hands-on cybersecurity project: designing, defending and attacking the IT infrastructure of a small, fictional regional airport in an isolated virtual lab.
 
-**Status:** Work in progress – version 0.6 completed
+**Status:** Work in progress – version 0.7 completed
 
 ---
 
@@ -25,7 +25,7 @@ The key lesson: the airports were not attacked directly – **their supplier was
 
 ## Lab architecture
 
-**Version 0.6 (current):**
+**Version 0.7 (current):**
 
 | Machine | Zone | Role in the scenario | OS | IP address |
 |---|---|---|---|---|
@@ -33,6 +33,7 @@ The key lesson: the airports were not attacked directly – **their supplier was
 | `checkin-srv` | Check-in | Check-in system (provided by an external supplier), protected by a host firewall | Ubuntu Server | 10.10.2.66/27 |
 | `checkin-pc01` | Check-in | Check-in desk operator's workstation | Windows 11 Enterprise | 10.10.2.80/27 |
 | `mon-srv` | Security Operations | Monitoring: Prometheus and Grafana | Ubuntu Server | 10.10.2.98/28 |
+| `wazuh-srv` | Security Operations | SIEM / SOC: Wazuh (server, indexer, dashboard) | Ubuntu Server 24.04 | 10.10.2.99/28 |
 | `soc-ws01` | Security Operations | Analyst workstation | Xubuntu | 10.10.2.100/28 |
 
 All machines run on **Hyper-V**. Each zone sits on its own isolated private switch (`Checkin-Zone`, `SecOps-Zone`): traffic between zones and towards the internet can only pass through the firewall.
@@ -45,7 +46,7 @@ All machines run on **Hyper-V**. Each zone sits on its own isolated private swit
 - [x] **[Chapter 4 – Firewall rules](04-firewall-rules/README.md):** default deny, centralized time sync and a real log investigation
 - [x] **[Chapter 5 – Host firewall](05-host-firewall/README.md):** ufw on the check-in server – defense in depth
 - [x] **[Chapter 6 – Monitoring](06-monitoring/README.md):** Security Operations zone, Prometheus and Grafana, chrony on the firewall
-- [ ] **Chapter 7 – SOC:** log collection and detection with Wazuh
+- [x] **[Chapter 7 – SOC](07-soc-wazuh/README.md):** Wazuh SIEM, agents on Linux and Windows, attack detection
 - [ ] **Chapter 8 – Attack simulation:** phishing and lateral movement from Kali Linux
 - [ ] **Chapter 9 – Incident response:** containment and incident report
 - [ ] **Chapter 10 – Governance:** risk assessment, disaster recovery plan, GDPR and NIS2
@@ -54,7 +55,7 @@ Each chapter will have its own folder with documentation, configuration files an
 
 ## Tools
 
-Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · chrony · ufw · Prometheus · Grafana · Xubuntu · *(coming next: Wazuh, Kali Linux)*
+Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · chrony · ufw · Prometheus · Grafana · Xubuntu · Wazuh · *(coming next: Kali Linux)*
 
 ## Disclaimer
 
