@@ -82,7 +82,7 @@ Servers run on **UTC**, so logs from every machine share one timeline regardless
 
 Internal ports (indexer, API) stay closed: those components talk to each other on the same host.
 
-## 🚦 Inter-zone firewall rule
+## Inter-zone firewall rule
 
 Alias `WAZUH_AGENT_PORTS` = 1514, 1515.
 
@@ -92,7 +92,7 @@ Alias `WAZUH_AGENT_PORTS` = 1514, 1515.
 
 Source is the whole zone (every machine gets an agent); destination is still **one host, two ports**.
 
-## 🛰️ Agents
+## Agents
 
 Deployed from the dashboard's **Deploy new agent** wizard, which generates the exact command per OS:
 
