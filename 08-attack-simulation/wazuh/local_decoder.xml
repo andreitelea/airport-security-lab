@@ -1,0 +1,19 @@
+<!--
+  Monteverde Airport - Chapter 8
+  File: /var/ossec/etc/decoders/local_decoder.xml (wazuh-srv)
+
+  Decodes ufw "BLOCK" lines collected from /var/log/ufw.log on checkin-srv.
+
+  Why a child of "kernel": the real log lines use an ISO 8601 timestamp
+  and the program name "kernel", so Wazuh's built-in "kernel" decoder
+  claims them first. A standalone decoder never fired on live events.
+  Attaching ours as a child of "kernel" lets it extract the fields.
+
+  Tested with /var/ossec/bin/wazuh-logtest using a real line from ufw.log.
+-->
+<decoder name="ufw-block">
+  <parent>kernel</parent>
+  <prematch>UFW BLOCK</prematch>
+  <regex type="pcre2">SRC=(\S+)\s+DST=(\S+).*?PROTO=(\S+)\s+SPT=(\d+)\s+DPT=(\d+)</regex>
+  <order>srcip,dstip,protocol,srcport,dstport</order>
+</decoder>
