@@ -123,8 +123,6 @@ From the check-in zone, Kali scanned the analyst workstation `soc-ws01` (10.10.2
 
 **Result before the fix:** 998 ports were blocked by the firewall's *Default deny*, but **80 and 443 got through** to the host. The cause was the web rule *"HTTP/HTTPS to any"*: it was meant to let machines download updates from the internet, but **"any" also includes the other internal zones**. It is like a pass for "any building" given to go outside, which also opens the door of the security office.
 
-![Cross-zone scan: ports 80 and 443 reach soc-ws01 through the web rule](images/crosszone-web-ports-pass.png)
-
 **The fix** (checkpoint `pre-web-rule-fix` taken first):
 
 - New alias `PRIVATE_NETS` = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
@@ -139,8 +137,6 @@ From the check-in zone, Kali scanned the analyst workstation `soc-ws01` (10.10.2
 
 - **Negative test:** the same scan now shows 80/443 as filtered, and the firewall log shows them blocked
 - **Positive test:** internet access from `checkin-srv` still works (`curl` returns `HTTP/2 301`)
-
-![After the fix: ports 80 and 443 towards soc-ws01 blocked by the firewall](images/crosszone-web-ports-blocked-after-fix.png)
 
 **Side effect:** this also partly closes a risk declared in Chapter 7. The web rules no longer include the firewall's own addresses, and from the SecOps zone only `soc-ws01` can reach the management interface. On the check-in side, OPNsense's anti-lockout rule still allows it (see limitations).
 
