@@ -2,7 +2,7 @@
 
 > A hands-on cybersecurity project: designing, defending and attacking the IT infrastructure of a small, fictional regional airport in an isolated virtual lab.
 
-**Status:** Work in progress – version 0.7 completed
+**Status:** Work in progress – version 0.8 completed
 
 ---
 
@@ -25,7 +25,7 @@ The key lesson: the airports were not attacked directly – **their supplier was
 
 ## Lab architecture
 
-**Version 0.7 (current):**
+**Version 0.8 (current):**
 
 | Machine | Zone | Role in the scenario | OS | IP address |
 |---|---|---|---|---|
@@ -35,8 +35,9 @@ The key lesson: the airports were not attacked directly – **their supplier was
 | `mon-srv` | Security Operations | Monitoring: Prometheus and Grafana | Ubuntu Server | 10.10.2.98/28 |
 | `wazuh-srv` | Security Operations | SIEM / SOC: Wazuh (server, indexer, dashboard) | Ubuntu Server 24.04 | 10.10.2.99/28 |
 | `soc-ws01` | Security Operations | Analyst workstation | Xubuntu | 10.10.2.100/28 |
+| `kali-redteam` | WAN side or check-in (per test) | Attacker machine for simulated attacks | Kali Linux | DHCP (WAN side) · 10.10.2.81/27 (insider) |
 
-All machines run on **Hyper-V**. Each zone sits on its own isolated private switch (`Checkin-Zone`, `SecOps-Zone`): traffic between zones and towards the internet can only pass through the firewall.
+All machines run on **Hyper-V**. Each zone sits on its own isolated private switch (`Checkin-Zone`, `SecOps-Zone`): traffic between zones and towards the internet can only pass through the firewall. The attacker VM `kali-redteam` is moved between the WAN side and the check-in zone depending on the test.
 
 ## Roadmap
 
@@ -47,7 +48,7 @@ All machines run on **Hyper-V**. Each zone sits on its own isolated private swit
 - [x] **[Chapter 5 – Host firewall](05-host-firewall/README.md):** ufw on the check-in server – defense in depth
 - [x] **[Chapter 6 – Monitoring](06-monitoring/README.md):** Security Operations zone, Prometheus and Grafana, chrony on the firewall
 - [x] **[Chapter 7 – SOC](07-soc-wazuh/README.md):** Wazuh SIEM, agents on Linux and Windows, attack detection
-- [ ] **Chapter 8 – Attack simulation:** phishing and lateral movement from Kali Linux
+- [x] **[Chapter 8 – Attack simulation](08-attack-simulation/README.md):** reconnaissance from Kali Linux (external, insider, cross-zone) – a detection blind spot and a firewall rule flaw found and fixed
 - [ ] **Chapter 9 – Incident response:** containment and incident report
 - [ ] **Chapter 10 – Governance:** risk assessment, disaster recovery plan, GDPR and NIS2
 
@@ -55,7 +56,7 @@ Each chapter will have its own folder with documentation, configuration files an
 
 ## Tools
 
-Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · chrony · ufw · Prometheus · Grafana · Xubuntu · Wazuh · *(coming next: Kali Linux)*
+Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · chrony · ufw · Prometheus · Grafana · Xubuntu · Wazuh · Kali Linux · Nmap
 
 ## Disclaimer
 
