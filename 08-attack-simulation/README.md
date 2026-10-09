@@ -126,7 +126,7 @@ From the check-in zone, Kali scanned the analyst workstation `soc-ws01` (10.10.2
 **The fix** (checkpoint `pre-web-rule-fix` taken first):
 
 - New alias `PRIVATE_NETS` = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-- Web rules on **LAN** and **SECOPS**: destination set to `PRIVATE_NETS` with **invert** enabled ("anything that is *not* a private network" – in practice, the internet). Rules renamed to *"... HTTP/HTTPS to internet only (updates)"*
+- Web rules on **LAN** and **SECOPS**: destination set to `PRIVATE_NETS` with **invert** enabled ("anything that is *not* a private network" – in practice, the internet). Rules renamed to *"Check-in zone - HTTP/HTTPS to internet only (updates)"* and *"SecOps zone - HTTP/HTTPS to internet only (updates)"*
 - Inverting the destination also removed SecOps' access to the firewall's web interface, so it was granted back explicitly – to one host only:
 
 | Interface | Source | Destination | Port | Description |
@@ -140,13 +140,41 @@ From the check-in zone, Kali scanned the analyst workstation `soc-ws01` (10.10.2
 
 **Side effect:** this also partly closes a risk declared in Chapter 7. The web rules no longer include the firewall's own addresses, and from the SecOps zone only `soc-ws01` can reach the management interface. On the check-in side, OPNsense's anti-lockout rule still allows it (see limitations).
 
+### A second finding: the host firewall on `soc-ws01` was off
+
+Before the fix, `soc-ws01` answered **closed** (TCP RST) on 80/443. A host with a "deny incoming" ufw policy should stay silent, so the answer itself was a clue. Checking the host confirmed it:
+
+```bash
+sudo ufw status verbose
+# Status: inactive
+```
+
+The workstation had **no host firewall running**. The perimeter firewall was its only protection – and, as Phase 3 showed, one wrong rule was enough to let traffic reach it. It is like a door with a lock fitted but never turned. Why ufw was inactive was not determined; what matters is that it was assumed to be on and was not.
+
+**The fix** (checkpoint `pre-ufw-enable` taken first) – the same baseline as the other hosts. `soc-ws01` offers no services, so no exceptions are needed:
+
+```bash
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw logging low
+sudo ufw enable
+```
+
+**Verification** – tested from `wazuh-srv`, in the same zone, so the perimeter firewall is not involved:
+
+| Test | Before | After |
+|---|---|---|
+| `nc -zv -w 3 10.10.2.100 80` from `wazuh-srv` | `Connection refused` (RST) | Timeout – silently dropped |
+| `journalctl -k \| grep "UFW BLOCK"` on `soc-ws01` | – | Block from 10.10.2.99 recorded |
+| Wazuh dashboard and internet from `soc-ws01` (positive test) | Working | Still working |
+
 ## Results at a glance
 
 | Phase | Blocked? | Logged? | Seen by the SOC? | Action taken |
 |---|---|---|---|---|
 | 1 – External | ✅ Firewall (WAN) | ✅ Firewall log | Firewall log only | – |
 | 2 – Insider | ✅ ufw | ✅ `ufw.log` | ❌ → ✅ after fix | ufw log collection, decoder, rules 100100/100101 |
-| 3 – Cross-zone | ⚠️ All ports except 80/443 → ✅ after fix | ✅ Firewall log | Firewall log only | `PRIVATE_NETS` alias, web rules restricted to the internet |
+| 3 – Cross-zone | ⚠️ All ports except 80/443 → ✅ after fix | ✅ Firewall log | Firewall log only | `PRIVATE_NETS` alias, web rules restricted to the internet, ufw enabled on `soc-ws01` |
 
 ## MITRE ATT&CK mapping
 
@@ -163,12 +191,12 @@ During the work, `wazuh-manager` timed out at startup: it had started **before t
 
 ```bash
 sudo systemctl stop wazuh-manager        # stop the service cleanly
-ps aux | grep -i ossec                   # check that no Wazuh process is still running
+pgrep -af /var/ossec                     # must return nothing: no Wazuh process still running
 sudo rm -r /var/ossec/var/start-script-lock   # remove the stale lock only after that check
 sudo systemctl start wazuh-manager
 ```
 
-Removing the lock while processes are still running could leave two instances fighting over the same files – hence the check first.
+Removing the lock while processes are still running could leave two instances fighting over the same files – hence the check first. `pgrep -af` is preferred over `ps aux | grep`, because `grep` always finds its own process and can look like a survivor. With the manager running, the same command lists its daemons (`wazuh-analysisd`, `wazuh-remoted`, …) and the API processes.
 
 ## Known limitations / open points
 
@@ -177,7 +205,7 @@ Removing the lock while processes are still running could leave two instances fi
 - **ufw logs a sample, not every packet:** with `logging low`, ufw rate-limits its own entries, so Wazuh sees part of the blocked traffic. Thresholds in rule 100101 must take this into account
 - **Rule 100101 fires repeatedly during long scans:** it works, but needs tuning to avoid alert fatigue
 - **Intra-zone traffic is invisible to the perimeter firewall:** detection inside a zone depends entirely on host logs and agents
-- **`soc-ws01` answered *closed* (RST) on 80/443** before the fix, instead of silently dropping as expected from a "deny incoming" ufw policy. Not yet explained – to be checked against its ufw configuration
+- **`soc-ws01` has no Wazuh agent yet:** its ufw blocks are logged locally but, unlike `checkin-srv`, do not reach the SIEM
 - **Scope:** this chapter covers reconnaissance only. Phishing, exploitation and lateral movement were not simulated
 
 ## Lessons learned
@@ -187,6 +215,7 @@ Removing the lock while processes are still running could leave two instances fi
 - **"Any" means any:** a rule written for internet updates was quietly opening paths between internal zones. Destinations should say exactly what they mean
 - **Correlation turns noise into signal:** one blocked packet is level 5, a burst from the same source is a level 10 port-scan alert
 - **Every fix can have side effects:** restricting the web rules removed the SOC's access to the firewall GUI, which had to be granted back explicitly and narrowly
+- **Verify, don't assume:** ufw on `soc-ws01` was believed to be active and was not. A security control only exists if a test proves it is running
 - **Know the startup order of your stack:** the Wazuh manager depends on the indexer, and a stale lock can block recovery
 
 ## Files
