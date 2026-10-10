@@ -2,7 +2,7 @@
 
 > A hands-on cybersecurity project: designing, defending and attacking the IT infrastructure of a small, fictional regional airport in an isolated virtual lab.
 
-**Status:** Work in progress – version 0.9 completed
+**Status:** Completed – version 1.0
 
 ---
 
@@ -25,7 +25,7 @@ The key lesson: the airports were not attacked directly – **their supplier was
 
 ## Lab architecture
 
-**Version 0.9 (current):**
+**Version 1.0 (current):**
 
 | Machine | Zone | Role in the scenario | OS | IP address |
 |---|---|---|---|---|
@@ -37,7 +37,7 @@ The key lesson: the airports were not attacked directly – **their supplier was
 | `soc-ws01` | Security Operations | Analyst workstation | Xubuntu | 10.10.2.100/28 |
 | `kali-redteam` | WAN side or check-in (per test) | Attacker machine for simulated attacks | Kali Linux | DHCP (WAN side) · 10.10.2.81/27 (insider) |
 
-All machines run on **Hyper-V**. Each zone sits on its own isolated private switch (`Checkin-Zone`, `SecOps-Zone`): traffic between zones and towards the internet can only pass through the firewall. The attacker VM `kali-redteam` is moved between the WAN side and the check-in zone depending on the test.
+All machines run on **Hyper-V**. Each zone sits on its own isolated private switch (`Checkin-Zone`, `SecOps-Zone`): traffic between zones and towards the internet can only pass through the firewall. The attacker VM `kali-redteam` is moved between the WAN side and the check-in zone depending on the test. The SIEM is backed up to an **offline external disk** and its recovery has been tested (Chapter 10).
 
 ## Roadmap
 
@@ -50,13 +50,24 @@ All machines run on **Hyper-V**. Each zone sits on its own isolated private swit
 - [x] **[Chapter 7 – SOC](07-soc-wazuh/README.md):** Wazuh SIEM, agents on Linux and Windows, attack detection
 - [x] **[Chapter 8 – Attack simulation](08-attack-simulation/README.md):** reconnaissance from Kali Linux (external, insider, cross-zone) – a detection blind spot and a firewall rule flaw found and fixed
 - [x] **[Chapter 9 – Incident response](09-incident-response/README.md):** Sysmon endpoint telemetry, a simulated attack chain (assume breach) with Atomic Red Team, detection, and a full NIST response with incident report
-- [ ] **Chapter 10 – Governance:** risk assessment, disaster recovery plan, GDPR and NIS2
+- [x] **[Chapter 10 – Governance](10-governance/README.md):** risk register, a tested disaster recovery from offline backup, GDPR assessment and NIS2 gap analysis
 
-Each chapter will have its own folder with documentation, configuration files and screenshots.
+Each chapter has its own folder with documentation, configuration files and screenshots.
+
+## Highlights
+
+- **Two real flaws found by testing my own defenses:** a SIEM blind spot for host-firewall logs and an over-permissive firewall rule (Chapter 8)
+- **A full incident response cycle:** an attack chain mapped to MITRE ATT&CK, detected end to end, contained, eradicated and written up as a formal incident report (Chapter 9)
+- **A measured disaster recovery:** the SIEM restored from an offline, hash-verified backup in **52 minutes** against a 60-minute target – and two recovery problems found and fixed along the way (Chapter 10)
+- **Governance on top of the technology:** 15 risks assessed and treated, and the lab checked against GDPR and NIS2 (Chapter 10)
 
 ## Tools
 
 Hyper-V · OPNsense · Ubuntu Server · Windows · PowerShell · chrony · ufw · Prometheus · Grafana · Xubuntu · Wazuh · Sysmon · Atomic Red Team · Kali Linux · Nmap
+
+## Frameworks and regulations
+
+MITRE ATT&CK · NIST SP 800-61 (incident response) · NIST SP 800-30 and ISO/IEC 27005 (risk assessment) · ISO/IEC 27001 (risk treatment) · NIST SP 800-34 (contingency planning) · GDPR · NIS2
 
 ## Disclaimer
 
